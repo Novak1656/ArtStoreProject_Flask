@@ -21,50 +21,13 @@
                 {% else %}
                 {% for art in arts %}
                 <div class="col" align="center">
-                    <div class="card mb-4 bg-dark text-white border" style="width: 20rem;">
-                        <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                    <div class="card mb-4 bg-dark text-white border border-start-0 border-end-0" style="width: 20rem;">
+                        <button class="btn" data-bs-toggle="modal" data-bs-target="#art{{art.id}}">
+                                <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                        </button>
                         <div class="card-body text-center">
                             <h2 class="card-title">{{ art.name }}</h2>
                             <p class="card-text">Автор: {{ art.author }}</p>
-                        </div>
-                        <div class="card-img-overlay">
-                            <div class="dropdown text-end">
-                                <button class="btn btn-sm bg-dark border text-white dropdown-toggle" id="art_config" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-contract" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M3.646 13.854a.5.5 0 0 0 .708 0L8 10.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708zm0-11.708a.5.5 0 0 1 .708 0L8 5.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"/>
-                                    </svg>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end bg-dark border" aria-labelledby="art_config">
-
-                                    <div class="btn-group-vertical dropdown-item bg-dark">
-                                        <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#art{{art.id}}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707z"/>
-                                            </svg>
-                                        </button>
-                                        <a  type="button" href="{{ url_for('art_update', hash=art.hash_name) }}" class="btn btn-outline-warning">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-                                                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-                                                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-                                            </svg>
-                                        </a>
-                                        <a type="button" href="{{ url_for('delete_art', hash=art.hash_name) }}" class="btn btn-outline-danger">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                            </svg>
-                                        </a>
-                                        <a class="btn btn-outline-success" type="button" href="{{ url_for('download', hash=art.hash_name) }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
-                                                <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                                            </svg>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -76,14 +39,60 @@
                                 <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
                                 <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img">
                             </div>
+                            <div class="modal-footer">
+                                <div class="btn-group-horizontal w-100 text-center btn-sm">
+                                    <a  type="button" href="{{ url_for('art_update', hash=art.hash_name) }}" class="btn btn-outline-warning">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                                        </svg>
+                                        Изменить
+                                    </a>
+                                    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete_accept_art{{ art.id }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        </svg>
+                                        Удалить
+                                    </button>
+                                    <a class="btn btn-outline-success" type="button" href="{{ url_for('download', hash=art.hash_name) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
+                                            <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                        </svg>
+                                        Скачать
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- Modal Fullscreen Art-->
+
+                <!-- Modal delete -->
+                <div class="modal fade" id="delete_accept_art{{ art.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Удаление</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="display-9">Вы действительно хотите удалить иллюстрацию из своей галлереи?</p>
+                                <p>После удаления данная иллюстрация больше не будет отображаться в магазине.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-success" href="{{ url_for('delete_art', hash=art.hash_name) }}">Да</a>
+                                <button class="btn btn-danger" data-bs-dismiss="modal">Нет</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal delete -->
                 {% endfor %}
                 {% endif %}
 
-                <div class="text-center mb-3 text-white border border-top-0 border-start-0 border-end-0">
+                <div class="text-center mt-3 mb-3 text-white border border-top-0 border-start-0 border-end-0">
                     <h1 class="display-6">Приобретённые работы</h1>
                 </div>
                 {% if g_arts|length == 0 %}
@@ -95,44 +104,12 @@
                 {% else %}
                 {% for g_art in g_arts %}
                 <div class="col" align="center">
-                    <div class="card mb-4 bg-dark text-white border" style="width: 20rem;">
-                        <img src="{{ url_for('show_art', hash_g=g_art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                    <div class="card mb-4 bg-dark text-white border border-start-0 border-end-0" style="width: 20rem;">
+                        <button class="btn" data-bs-toggle="modal" data-bs-target="#g_art{{g_art.art_id}}">
+                            <img src="{{ url_for('show_art', hash_g=g_art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                        </button>
                         <div class="card-body text-center">
-<!--                            <h2 class="card-title">{{ g_art.name }}</h2>-->
                             <p class="card-text">Автор: {{ g_art.author }}</p>
-                        </div>
-                        <div class="card-img-overlay">
-                            <div class="dropdown text-end">
-                                <button class="btn btn-sm bg-dark border text-white dropdown-toggle" id="g_art_config" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-contract" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M3.646 13.854a.5.5 0 0 0 .708 0L8 10.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708zm0-11.708a.5.5 0 0 1 .708 0L8 5.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"/>
-                                    </svg>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end bg-dark border" aria-labelledby="g_art_config">
-
-                                    <div class="btn-group-vertical dropdown-item bg-dark">
-                                        <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#g_art{{g_art.art_id}}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrows-angle-expand" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707z"/>
-                                            </svg>
-                                        </button>
-                                        <a type="button" href="{{ url_for('delete_art', hash_g=art.hash_name) }}" class="btn btn-outline-danger">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                                            </svg>
-                                        </a>
-                                        <a class="btn btn-outline-success" type="button" href="{{ url_for('download', hash_g=g_art.hash_name) }}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
-                                                <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                                            </svg>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -144,10 +121,50 @@
                                 <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
                                 <img src="{{ url_for('show_art', hash_g=g_art.hash_name) }}" class="rounded card-img">
                             </div>
+
+                            <div class="modal-footer">
+                                <div class="btn-group-horizontal w-100 text-center btn-sm">
+                                    <button class="btn btn-outline-danger"  data-bs-toggle="modal" data-bs-target="#delete_accept_gallery_art{{ g_art.art_id }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                        </svg>
+                                        Удалить
+                                    </button>
+
+                                    <a class="btn btn-outline-success" type="button" href="{{ url_for('download', hash_g=g_art.hash_name) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
+                                            <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                        </svg>
+                                        Скачать
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- Modal Fullscreen Art-->
+
+                <!-- Modal delete from gallery -->
+                <div class="modal fade" id="delete_accept_gallery_art{{ g_art.art_id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Удаление</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="display-9">Вы действительно хотите удалить иллюстрацию из своей галлереи?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-success" href="{{ url_for('delete_art', hash_g=g_art.hash_name) }}">Да</a>
+                                <button class="btn btn-danger" data-bs-dismiss="modal">Нет</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal delete from gallery -->
                 {% endfor %}
                 {% endif %}
             </div>
