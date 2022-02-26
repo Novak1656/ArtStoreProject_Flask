@@ -1,6 +1,6 @@
 import os
 import shutil
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response, send_from_directory, abort
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, send_from_directory
 from app.config import Config
 from app.forms import LoginForm, RegistrationForm, NewNamesForm, NewEmailForm, NewLoginForm, NewPasswordForm,\
     NewAvatarForm, ArtForm, ArtUpdateForm, AdminLoginForm
@@ -10,7 +10,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.admin import admin
 from werkzeug.utils import secure_filename
 import hashlib
-from cloudipsp import Api, Checkout
 
 
 app = Flask(__name__)
