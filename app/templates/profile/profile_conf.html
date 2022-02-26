@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Настройки профиля{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div >
+        <h1 class="display-4 text-center fw-normal p-3 border border border-top-0 rounded bg-secondary">Редактирование аккаунта</h1>
+    </div>
+    <br>
+    <div class="container bg-primary text-white">
+        <nav class="navbar navbar-primary bg-primary">
+            <h2 class="border-start">Аватар профиля</h2>
+            <div>
+                <button class="navbar-toggler btn-lg text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbar1" aria-controls="navbar1" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div class="collapse" id="navbar1">
+            <form method="post" enctype="multipart/form-data">
+                {{ avatar_form.hidden_tag() }}
+                <div class="form-group p-3">
+                    <span>{{ avatar_form.avatar.label() }}</span>
+                    {{ avatar_form.avatar() }}
+                </div>
+                <div class="form-group p-1 text-center">
+                    {{ avatar_form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container bg-secondary text-white">
+        <nav class="navbar bg-secondary">
+            <h2 class="border-start">Данные пользователя</h2>
+            <div>
+                <button class="navbar-toggler btn-lg text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbar2" aria-controls="navbar2" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div class="collapse" id="navbar2">
+            <form method="post">
+                {{ name_form.hidden_tag() }}
+                {% for form in name_form if form.name not in ['csrf_token', 'submit'] %}
+                <div class="form-group p-3">
+                    <span>{{ form.label() }}</span>
+                    {{ form() }}
+                </div>
+                {% endfor %}
+                <div class="form-group p-1 text-center">
+                    {{ name_form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container bg-info text-white">
+        <nav class="navbar bg-info">
+            <h2 class="border-start">Адрес электронной почты</h2>
+            <div>
+                <button class="navbar-toggler btn-lg text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbar3" aria-controls="navbar3" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div class="collapse" id="navbar3">
+            <form method="post">
+                {{ email_form.hidden_tag() }}
+                <div class="form-group p-3">
+                    <span>{{ email_form.email.label() }}</span>
+                    {{ email_form.email() }}
+                </div>
+                <div class="form-group p-1 text-center">
+                    {{ email_form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container bg-success text-white">
+        <nav class="navbar bg-success">
+            <h2 class="border-start">Логин</h2>
+            <div>
+                <button class="navbar-toggler btn-lg text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbar4" aria-controls="navbar4" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div class="collapse" id="navbar4">
+            <form method="post">
+                {{ login_form.hidden_tag() }}
+                {% for form in login_form if form.name not in ['csrf_token', 'submit'] %}
+                    <div class="form-group p-3">
+                        <span>{{ form.label() }}</span>
+                        {{ form() }}
+                    </div>
+                {% endfor %}
+                <div class="form-group p-1 text-center">
+                    {{ login_form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container bg-danger text-white">
+        <nav class="navbar bg-danger">
+            <h2 class="border-start">Пароль</h2>
+            <div>
+                <button class="navbar-toggler btn-lg text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5" aria-controls="navbar5" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-expand" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div class="collapse" id="navbar5">
+            <form method="post">
+                {{ password_form.hidden_tag() }}
+                {% for form in password_form if form.name not in ['csrf_token', 'submit'] %}
+                    <div class="form-group p-3">
+                        <span>{{ form.label() }}</span>
+                        {{ form() }}
+                    </div>
+                {% endfor %}
+                <div class="form-group p-1 text-center">
+                    {{ password_form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

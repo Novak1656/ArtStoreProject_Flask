@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Категории артов{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="text-center">
+        <h1 class="display-6">Все типы артов</h1>
+    </div>
+
+    <div class="bg-dark rounded container">
+        {% for genre in genres %}
+        <div class="row text-center mb-5">
+            {% if author_section %}
+            <a type="button" class="btn btn-lg btn-outline-success" href="{{ url_for('shop', genre=genre.name, author=author_section) }}">{{ genre.name }}</a>
+            {% else %}
+            <a type="button" class="btn btn-lg btn-outline-success" href="{{ url_for('shop', genre=genre.name) }}">{{ genre.name }}</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

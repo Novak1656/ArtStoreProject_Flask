@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %} Моя корзина {% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="text-center">
+        <h1 class="display-6">Корзина товаров</h1>
+    </div>
+
+    <div class="container bg-light rounded">
+        {% if arts|length == 0 %}
+        <h1 class="display-6">Вашей корзине нет товаров</h1>
+        {% else %}
+        <div class="row gy-5">
+            {% for art in arts %}
+            <div class="col mb-3" align="center">
+                <div class="card shadow-sm mb-4 h-100" style="width: 20rem;">
+                    <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                    <div class="card-body">
+                        <h1 class="card-text display-6">{{ art.name }}</h1>
+                        <p class="card-text">Автор: {{ art.author }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p class="card-text">Цена: {{ art.prise }} rub.</p>
+                    </div>
+                    <div class="card-img-overlay text-start shadow-sm">
+                        <a href="{{ url_for('basket', art_id=art.id) }}" type="button" class="btn bg-danger btn-close"></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="bg-dark text-white rounded p-1">
+        <h2 class="display-6">Сумма: {{ final_prise }} rub.</h2>
+        <p class="display-6">Кол-во товаров: {{ arts|length }}</p>
+        <form method="post">
+            <div class="form-group">
+                {% if arts|length == 0 %}
+                <button type="submit" class="btn btn-success disabled" value="buy">Перейти к оплате</button>
+                {% else %}
+                <button type="submit" class="btn btn-success" value="buy">Перейти к оплате</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

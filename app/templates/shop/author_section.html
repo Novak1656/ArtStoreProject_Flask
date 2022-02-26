@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Авторы{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="text-center">
+        <h1 class="display-6">Все авторы</h1>
+    </div>
+
+    <form method="post" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control bg-dark text-white" name="author_name" placeholder="Поиск...">
+            <button type="submit" class="btn btn-outline-success">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+
+    <div class="container bg-dark">
+        <div class="row text-center">
+            {% for author in authors %}
+            <div class="col p-3">
+                <a type="button" href="{{ url_for('shop', author=author.login) }}" class="btn btn-outline-danger rounded">
+                    <img src="{{ url_for('user_avatar', id=author.id) }}" class="rounded-circle" width="100" alt="Image not found">
+                    <p class="display-6">{{ author.login }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Настройки Арта {% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="text-center">
+        <h1 class="display-4">Редактирование арта</h1>
+    </div>
+
+    <div class="bg-info container w-50 rounded">
+        <form method="post">
+            {{ form.hidden_tag() }}
+            {% for elm in form if elm.name not in ['csrf_token', 'submit'] %}
+            <div class="form-group p3">
+                <span>{{ elm.label() }}</span>
+                {{ elm() }}
+            </div>
+            {% endfor %}
+
+            <div class="form-group p-3 text-center">
+                {{ form.submit() }}
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

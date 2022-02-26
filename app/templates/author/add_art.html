@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Новый арт{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="bg-dark text-white text-center">
+        <h1 class="display-4">Добавление нового арта</h1>
+    </div>
+    <div class="bg-secondary">
+        <form method="post" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {% for elm in form if elm.name not in ['csrf_token', 'submit'] %}
+            <div class="form-group p-3 text-white">
+                <span>{{ elm.label() }}</span>
+                {{ elm() }}
+            </div>
+            {% endfor %}
+            <div class="form-group p-1 text-center">
+                {{ form.submit() }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

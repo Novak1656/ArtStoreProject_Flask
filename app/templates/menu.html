@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block body %}
+<main>
+
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Добро пожаловать в ArtStore!</h1>
+                <p class="lead text-muted">Данная площадка предназначена для покупки иллюстраций разных авторов или продажи своих собственных, если вы сами являетесь автором.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="py-5">
+        <div class="container text-center">
+            <a href="{{ url_for('shop') }}" class="btn btn-lg btn-outline-success rounded">Перейти в магазин</a>
+        </div>
+    </div>
+
+</main>
+{% endblock %}
