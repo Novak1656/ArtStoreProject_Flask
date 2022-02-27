@@ -86,12 +86,14 @@ def login():
         return redirect(url_for('menu'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = db.session.query(User).filter(User.login == form.login.data).first()
-        if check_password_hash(user.password, form.password.data):
-            rm = form.remember.data
-            login_user(user, remember=rm)
-            return redirect(url_for('menu'))
-        flash("Неверный логин/пароль", "error")
+        try:
+            user = db.session.query(User).filter(User.login == form.login.data).first()
+            if check_password_hash(user.password, form.password.data):
+                rm = form.remember.data
+                login_user(user, remember=rm)
+                return redirect(url_for('menu'))
+        except:
+            flash("Неверный логин/пароль", "error")
     return render_template('authorization/login.html', form=form)
 
 
@@ -101,6 +103,8 @@ def registration():
         return redirect(url_for('menu'))
     form = RegistrationForm()
     if form.validate_on_submit():
+        if form.password.data != form.chek_password:
+            flash('Пароли не совпадают', 'error')
         password = generate_password_hash(form.password.data)
         with app.open_resource(app.root_path + url_for('static', filename='img/avatar.jpg'), "rb") as file:
             img = file.read()

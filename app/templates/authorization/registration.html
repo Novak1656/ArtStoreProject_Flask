@@ -25,6 +25,9 @@
             <h1 class="display-6">Регистрация нового аккаунта</h1>
         </div>
         <div class="w-50 position-absolute top-50 start-50 translate-middle" style="margin-top: 300px">
+            {% for msg in get_flashed_messages() %}
+            <div class="flash text-center text-danger">{{ msg }}</div>
+            {% endfor %}
             <form method="post">
                 {{ form.hidden_tag() }}
                 {% for elm in form if elm.name not in ['csrf_token', 'submit'] %}

@@ -21,10 +21,13 @@
 
 <main class="w-50 align-items-center justify-content-center">
     <div class="card position-absolute top-50 start-50 translate-middle">
-        <div class="card-header text-center">
+        <div class="card-header bg-dark text-white text-center">
             Вход в аккаунт
         </div>
         <div class="card-body">
+            {% for msg in get_flashed_messages() %}
+            <div class="flash text-danger text-center">{{ msg }}</div>
+            {% endfor %}
             <form method="post">
                 {{ forms }}
                 {{ form.hidden_tag() }}
@@ -44,7 +47,7 @@
                     </div>
                 {% endfor %}
 
-                <div class="form-group p-1">
+                <div class="form-group text-center">
                     <p>{{ form.remember.label() }} {{ form.remember() }}</p>
                 </div>
 
