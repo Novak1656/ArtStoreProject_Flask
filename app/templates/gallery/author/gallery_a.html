@@ -20,10 +20,10 @@
                 </div>
                 {% else %}
                 {% for art in arts %}
-                <div class="col" align="center">
-                    <div class="card mb-4 bg-dark text-white border border-start-0 border-end-0" style="width: 20rem;">
+                <div class="col p-5" align="center">
+                    <div class="card bg-dark text-white border border-start-0 border-end-0  h-100" style="width: 20rem;">
                         <button class="btn" data-bs-toggle="modal" data-bs-target="#art{{art.id}}">
-                                <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                            <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
                         </button>
                         <div class="card-body text-center">
                             <h2 class="card-title">{{ art.name }}</h2>
@@ -34,8 +34,8 @@
                 <!-- Modal Fullscreen Art-->
                 <div class="modal fade" id="art{{art.id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                     <div class="modal-dialog modal-fullscreen-md modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body bg-transparent text-end">
+                        <div class="modal-content bg-light bg-opacity-10">
+                            <div class="modal-body text-end">
                                 <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
                                 <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img">
                             </div>
@@ -72,7 +72,7 @@
                 <!-- Modal delete -->
                 <div class="modal fade" id="delete_accept_art{{ art.id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content bg-light bg-opacity-10">
                             <div class="modal-header">
                                 <h5 class="modal-title">Удаление</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -91,8 +91,14 @@
                 <!-- Modal delete -->
                 {% endfor %}
                 {% endif %}
+            </div>
+        </div>
+    </div>
 
-                <div class="text-center mt-3 mb-3 text-white border border-top-0 border-start-0 border-end-0">
+    <div class="album py-3 bg-success bg-opacity-75">
+        <div class="container">
+            <div class="row">
+                <div class="text-center mt-5 mb-3 text-white border border-top-0 border-start-0 border-end-0">
                     <h1 class="display-6">Приобретённые работы</h1>
                 </div>
                 {% if g_arts|length == 0 %}
@@ -103,8 +109,8 @@
                 </div>
                 {% else %}
                 {% for g_art in g_arts %}
-                <div class="col" align="center">
-                    <div class="card mb-4 bg-dark text-white border border-start-0 border-end-0" style="width: 20rem;">
+                <div class="col p-5" align="center">
+                    <div class="card bg-success bg-opacity-10 text-white border border-start-0 border-end-0 h-100" style="width: 20rem;">
                         <button class="btn" data-bs-toggle="modal" data-bs-target="#g_art{{g_art.art_id}}">
                             <img src="{{ url_for('show_art', hash_g=g_art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
                         </button>
@@ -116,8 +122,8 @@
                 <!-- Modal Fullscreen Art-->
                 <div class="modal fade" id="g_art{{g_art.art_id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                     <div class="modal-dialog modal-fullscreen-md modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body bg-transparent text-end">
+                        <div class="modal-content bg-light bg-opacity-10">
+                            <div class="modal-body text-end">
                                 <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
                                 <img src="{{ url_for('show_art', hash_g=g_art.hash_name) }}" class="rounded card-img">
                             </div>
@@ -149,7 +155,7 @@
                 <!-- Modal delete from gallery -->
                 <div class="modal fade" id="delete_accept_gallery_art{{ g_art.art_id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content bg-light bg-opacity-10">
                             <div class="modal-header">
                                 <h5 class="modal-title">Удаление</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

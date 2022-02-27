@@ -3,18 +3,38 @@
 {% block title %}Категории артов{% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container w-50">
     <div class="text-center">
         <h1 class="display-6">Все типы артов</h1>
     </div>
 
-    <div class="bg-dark rounded container">
+    <div class="bg-info bg-opacity-50 rounded container">
         {% for genre in genres %}
-        <div class="row text-center mb-5">
+        <div class="row text-center mb-3">
             {% if author_section %}
-            <a type="button" class="btn btn-lg btn-outline-success" href="{{ url_for('shop', genre=genre.name, author=author_section) }}">{{ genre.name }}</a>
+            <a type="button" class="btn btn-lg btn-info" href="{{ url_for('shop', genre=genre.name, author=author_section) }}">
+                <div class="text-start border-start border-top">
+                    <h1 class="display-9 ms-3">{{ genre.name }}</h1>
+                </div>
+                <div class="text-center">
+                    <h1 class="display-6">{{ genre.name }}</h1>
+                </div>
+                <div class="text-end border-end border-bottom">
+                    <h1 class="display-9 me-3">{{ genre.name }}</h1>
+                </div>
+            </a>
             {% else %}
-            <a type="button" class="btn btn-lg btn-outline-success" href="{{ url_for('shop', genre=genre.name) }}">{{ genre.name }}</a>
+            <a type="button" class="btn btn-lg btn-info" href="{{ url_for('shop', genre=genre.name) }}">
+                <div class="text-start border-start border-top">
+                    <h1 class="display-9 ms-3">{{ genre.name }}</h1>
+                </div>
+                <div class="text-center">
+                    <h1 class="display-6">{{ genre.name }}</h1>
+                </div>
+                <div class="text-end border-end border-bottom">
+                    <h1 class="display-9 me-3">{{ genre.name }}</h1>
+                </div>
+            </a>
             {% endif %}
         </div>
         {% endfor %}

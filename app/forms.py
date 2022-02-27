@@ -22,7 +22,7 @@ class RegistrationForm(FlaskForm):
                              render_kw={"placeholder": "Придумайте пароль...", "class": "form-control"})
     chek_password = PasswordField('Подтвердите пароль: ', validators=[InputRequired(), EqualTo('password', message="Пароли не совпадают")],
                                   render_kw={"placeholder": "Введите пароль ещё раз...", "class": "form-control"})
-    role = SelectField('Я: ', choices=[('Пользователь', 'Пользователь'), ('Автор', 'Автор')], validators=[InputRequired()],
+    role = SelectField('Я: ', choices=[('Пользователь', 'Пользователь (может покупать иллюстрации)'), ('Автор', 'Автор (может покупать иллюстрации, а также продавать свои)')], validators=[InputRequired()],
                        render_kw={"placeholder": "Автор/Пользователь", "class": "form-control"})
     submit = SubmitField('Зарегестрироваться', render_kw={"class": "btn btn-success"})
 
@@ -73,14 +73,14 @@ class ArtForm(FlaskForm):
                        render_kw={"placeholder": "Введите название для арта...", "class": "form-control"})
     genre = SelectField('Жанр: ', coerce=str, validators=[InputRequired()], render_kw={'class': 'form-control'})
     prise = IntegerField('Цена в руб.: ', validators=[InputRequired()], render_kw={'class': 'form-control'})
-    submit = SubmitField('Добавить', render_kw={"class": "btn btn-success"})
+    submit = SubmitField('Добавить', render_kw={"class": "btn btn-dark w-50"})
 
 
 class ArtUpdateForm(FlaskForm):
     new_name = StringField('Название:', render_kw={'class': 'form-control'})
     genre = SelectField('Жанр: ', coerce=str, render_kw={'class': 'form-control'})
     prise = IntegerField('Цена в руб.: ', render_kw={'class': 'form-control'})
-    submit = SubmitField('Сохранить изменения', render_kw={'class': 'btn btn-success'})
+    submit = SubmitField('Сохранить изменения', render_kw={'class': 'btn btn-dark w-50'})
 
 
 class AdminLoginForm(FlaskForm):

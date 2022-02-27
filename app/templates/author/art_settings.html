@@ -8,7 +8,7 @@
         <h1 class="display-4">Редактирование арта</h1>
     </div>
 
-    <div class="bg-info container w-50 rounded">
+    <div class="bg-success bg-opacity-75 p-3 container w-50 rounded">
         <form method="post">
             {{ form.hidden_tag() }}
             {% for elm in form if elm.name not in ['csrf_token', 'submit'] %}

@@ -21,8 +21,8 @@
         <div class="row text-center">
             {% for author in authors %}
             <div class="col p-3">
-                <a type="button" href="{{ url_for('shop', author=author.login) }}" class="btn btn-outline-danger rounded">
-                    <img src="{{ url_for('user_avatar', id=author.id) }}" class="rounded-circle" width="100" alt="Image not found">
+                <a type="button" href="{{ url_for('shop', author=author.login) }}" class="btn btn-outline-success bg-opacity-75 rounded">
+                    <img src="{{ url_for('user_avatar', id=author.id) }}" class="rounded-circle" height="100" width="100" alt="Image not found">
                     <p class="display-6">{{ author.login }}</p>
                 </a>
             </div>

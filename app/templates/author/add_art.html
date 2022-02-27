@@ -4,10 +4,10 @@
 
 {% block body %}
 <div class="container">
-    <div class="bg-dark text-white text-center">
+    <div class="text-center">
         <h1 class="display-4">Добавление нового арта</h1>
     </div>
-    <div class="bg-secondary">
+    <div class="container bg-success bg-opacity-75 rounded w-50">
         <form method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             {% for elm in form if elm.name not in ['csrf_token', 'submit'] %}
@@ -16,7 +16,7 @@
                 {{ elm() }}
             </div>
             {% endfor %}
-            <div class="form-group p-1 text-center">
+            <div class="form-group p-3 text-center">
                 {{ form.submit() }}
             </div>
         </form>

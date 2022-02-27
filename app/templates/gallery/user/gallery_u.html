@@ -19,8 +19,8 @@
                 </div>
                 {% else %}
                 {% for art in arts %}
-                <div class="col" align="center">
-                    <div class="card mb-4 bg-dark text-white border border-start-0 border-end-0" style="width: 20rem;">
+                <div class="col p-5" align="center">
+                    <div class="card mb-4 bg-dark text-white border border-start-0 border-end-0 h-100" style="width: 20rem;">
                         <button class="btn" data-bs-toggle="modal" data-bs-target="#art{{art.art_id}}">
                             <img src="{{ url_for('show_art', hash_g=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
                         </button>
@@ -32,8 +32,8 @@
                 <!-- Modal Fullscreen Art-->
                 <div class="modal fade" id="art{{art.art_id}}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                     <div class="modal-dialog modal-fullscreen-md modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body bg-transparent text-end">
+                        <div class="modal-content bg-light bg-opacity-10">
+                            <div class="modal-body text-end">
                                 <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
                                 <img src="{{ url_for('show_art', hash_g=art.hash_name) }}" class="rounded card-img">
                             </div>
@@ -64,7 +64,7 @@
                 <!-- Modal delete from gallery -->
                 <div class="modal fade" id="delete_accept_gallery_art{{ art.art_id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content bg-light bg-opacity-10">
                             <div class="modal-header">
                                 <h5 class="modal-title">Удаление</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -123,7 +123,11 @@ def logout():
 @login_required
 def profile():
     user = db.session.query(User).filter(User.id == current_user.id).first()
-    return render_template('profile/profile.html', user=user)
+    if user.roles == 'Автор':
+        arts = db.session.query(Art).filter(Art.author == user.login).all()
+    else:
+        arts = db.session.query(Gallery).filter(Gallery.user_id == user.id).all()
+    return render_template('profile/profile.html', user=user, arts=arts, role=user.roles)
 
 
 @app.route('/user_avatar')
@@ -429,5 +433,3 @@ if __name__ == '__main__':
 
 
 # Добавить артам хэш который формируется по бинарному значению арта, чтобыы нельзя было загружать один и тот же арт
-# Залить на сервер
-
