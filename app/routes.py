@@ -31,10 +31,9 @@ def create_hash_img_title(title):
 
 
 def add_in_basket(art_id, url):
-    art = db.session.query(Art).get(art_id)
+    art = Art.get_arts(art_id=art_id)
     basket = Basket(art_id=art.id, prise=art.prise, user_id=current_user.id)
-    db.session.add(basket)
-    db.session.commit()
+    basket.new_basket()
     flash('Товар добавлен в корзину', 'message')
     return redirect(url)
 
@@ -42,25 +41,24 @@ def add_in_basket(art_id, url):
 def finish_buy(basket_info):
     new_arts = []
     for basket_art in basket_info:
-        art = db.session.query(Art).filter(Art.id == basket_art.art_id).first()
+        art = Art.get_arts(art_id=basket_art.art_id)
         new_arts.append(art)
-        db.session.delete(basket_art)
+        basket_art.delete_basket()
     for art_info in new_arts:
         shutil.copy(
-            os.path.join('static/img/shop_art', art_info.hash_name + '.png'),
-            os.path.join('static/img/user_art/User' + str(current_user.id) + '_' + current_user.login,
-                         str(current_user.id)+art_info.hash_name + '.png')
+            os.path.join('static/img/shop_art', f'{art_info.hash_name}.png'),
+            os.path.join(f'static/img/user_art/User{current_user.id}_{current_user.login}',
+                         f'{current_user.id}{art_info.hash_name}.png')
         )
         query = Gallery(user_id=current_user.id, art_id=art_info.id, art=art_info.art,
                         genre=art_info.genre, author=art_info.author, hash_name=str(current_user.id)+art_info.hash_name)
-        db.session.add(query)
-    db.session.commit()
+        query.append_gallery()
     return True
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.query(User).get(user_id)
+    return User.get_user(user_id=user_id)
 
 
 @app.route('/AsAp/', methods=['POST', 'GET'])
@@ -76,8 +74,7 @@ def admin_panel():
 @app.route('/menu')
 @login_required
 def menu():
-    user = current_user
-    return render_template('menu.html', user=user)
+    return render_template('menu.html', user=current_user)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -87,13 +84,14 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         try:
-            user = db.session.query(User).filter(User.login == form.login.data).first()
+            user = User.get_user(user_login=form.login.data)
             if check_password_hash(user.password, form.password.data):
                 rm = form.remember.data
                 login_user(user, remember=rm)
                 return redirect(url_for('menu'))
-        except:
+        except Exception:
             flash("Неверный логин/пароль", "error")
+            raise
     return render_template('authorization/login.html', form=form)
 
 
@@ -103,16 +101,19 @@ def registration():
         return redirect(url_for('menu'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        if form.password.data != form.chek_password:
-            flash('Пароли не совпадают', 'error')
-        password = generate_password_hash(form.password.data)
-        with app.open_resource(app.root_path + url_for('static', filename='img/avatar.jpg'), "rb") as file:
-            img = file.read()
-        user = User(login=form.login.data, email=form.email.data, password=password, roles=form.role.data, avatar=img)
-        db.session.add(user)
-        db.session.commit()
-        os.mkdir(app.root_path + url_for('static', filename='img/user_art/' + 'User' + str(user.id) + '_' + user.login))
-        return redirect(url_for('login'))
+        try:
+            if form.password.data != form.chek_password.data:
+                flash('Пароли не совпадают', 'error')
+            password = generate_password_hash(form.password.data)
+            with app.open_resource(app.root_path + url_for('static', filename='img/avatar.jpg'), "rb") as file:
+                img = file.read()
+            user = User(login=form.login.data, email=form.email.data,
+                        password=password, roles=form.role.data, avatar=img)
+            user.reg_user()
+            os.mkdir(app.root_path + url_for('static', filename=f"img/user_art/User{user.id}_{user.login}"))
+            return redirect(url_for('login'))
+        except Exception as e:
+            return f"Registration action failed with error: {e}"
     return render_template('authorization/registration.html', form=form)
 
 
@@ -126,7 +127,7 @@ def logout():
 @app.route('/profile')
 @login_required
 def profile():
-    user = db.session.query(User).filter(User.id == current_user.id).first()
+    user = current_user
     if user.roles == 'Автор':
         arts = db.session.query(Art).filter(Art.author == user.login).all()
     else:
@@ -135,15 +136,15 @@ def profile():
 
 
 @app.route('/user_avatar')
-@app.route('/user_avatar/<int:id>')
+@app.route('/user_avatar/<int:user_id>')
 @login_required
-def user_avatar(id=None):
-    if id:
-        user = db.session.query(User).filter(User.id == id).first()
+def user_avatar(user_id=None):
+    if user_id:
+        user = User.get_user(user_id=user_id)
         avatar = make_response(user.avatar)
         avatar.headers['Content-Type'] = 'image'
         return avatar
-    elif not id:
+    elif not user_id:
         avatar = make_response(current_user.avatar)
         avatar.headers['Content-Type'] = 'image'
         return avatar
@@ -160,40 +161,31 @@ def profile_config():
     avatar_form = NewAvatarForm()
 
     if name_form.validate_on_submit():
-        db.session.query(User).filter(User.id == current_user.id).update({'name': name_form.name.data,
-                                                                          'surname': name_form.surname.data,
-                                                                          'date_of_birth': name_form.date_of_birth.data}
-                                                                         , synchronize_session='fetch')
-        db.session.commit()
+        params = {'name': name_form.name.data, 'surname': name_form.surname.data,
+                  'date_of_birth': name_form.date_of_birth.data}
+        User.update_user(user_id=current_user.id, params=params)
         return redirect(url_for('profile', id=current_user.id))
 
     if email_form.validate_on_submit():
-        db.session.query(User).filter(User.id == current_user.id).update({'email': email_form.email.data},
-                                                                         synchronize_session='fetch')
-        db.session.commit()
+        User.update_user(user_id=current_user.id, params={'email': email_form.email.data})
         return redirect(url_for('profile', id=current_user.id))
 
     if login_form.validate_on_submit():
-        db.session.query(User).filter(User.id == current_user.id).update({'login': login_form.login.data},
-                                                                         synchronize_session='fetch')
-        db.session.commit()
+        User.update_user(user_id=current_user.id, params={'login': login_form.login.data})
         return redirect(url_for('profile', id=current_user.id))
 
     if password_form.validate_on_submit():
         if check_password_hash(current_user.password, password_form.password.data):
             password = generate_password_hash(password_form.new_password.data)
-            db.session.query(User).filter(User.id == current_user.id).update({'password': password},
-                                                                             synchronize_session='fetch')
-            db.session.commit()
+            User.update_user(user_id=current_user.id, params={'password': password})
             return redirect(url_for('profile', id=current_user.id))
 
     if avatar_form.validate_on_submit():
         filename = secure_filename(avatar_form.avatar.data.filename)
-        avatar_form.avatar.data.save('static/img/' + filename)
-        with app.open_resource(app.root_path + url_for('static', filename='img/' + filename), "rb") as file:
+        avatar_form.avatar.data.save(f'static/img/{filename}')
+        with app.open_resource(app.root_path + url_for('static', filename=f'img/{filename}'), "rb") as file:
             img = file.read()
-        db.session.query(User).filter(User.id == current_user.id).update({'avatar': img}, synchronize_session='fetch')
-        db.session.commit()
+        User.update_user(user_id=current_user.id, params={'avatar': img})
         os.remove(os.path.join('static/img/', filename))
         return redirect(url_for('profile', id=current_user.id))
     return render_template('profile/profile_conf.html', user=user, name_form=name_form, email_form=email_form,
@@ -204,22 +196,23 @@ def profile_config():
 @login_required
 def add_art():
     user = current_user
-    genres = db.session.query(Genre).order_by(Genre.name).all()
+    genres = Genre.get_genres()
     genres_list = [(genre.name, genre.name) for genre in genres]
     form = ArtForm()
     form.genre.choices = genres_list
     if form.validate_on_submit():
-        hash_name = create_hash_img_title(form.name.data)
-        filename = secure_filename(hash_name + '.png')
-        form.art.data.save('static/img/shop_art/' + filename)
-        with app.open_resource(app.root_path + url_for('static', filename='img/shop_art/' + filename), "rb") as file:
-            art = file.read()
-        new_art = Art(name=form.name.data, hash_name=hash_name, art=art, author=current_user.login,
-                      genre=form.genre.data, prise=form.prise.data)
-        db.session.add(new_art)
-        db.session.commit()
-        # os.remove(os.path.join('static/img/', filename))
-        return redirect(url_for('gallery'))
+        try:
+            hash_name = create_hash_img_title(form.name.data)
+            filename = secure_filename(f'{hash_name}.png')
+            form.art.data.save(f'static/img/shop_art/{filename}')
+            with app.open_resource(app.root_path + url_for('static', filename=f'img/shop_art/{filename}'), "rb") as f:
+                art = f.read()
+            new_art = Art(name=form.name.data, hash_name=hash_name, art=art,
+                          author=current_user.login, genre=form.genre.data, prise=form.prise.data)
+            new_art.append_art()
+            return redirect(url_for('gallery'))
+        except Exception as e:
+            return f"Append new art action is failed with error: {e}"
     return render_template('author/add_art.html', user=user, form=form)
 
 
@@ -228,11 +221,11 @@ def add_art():
 def gallery():
     user = current_user
     if user.roles == 'Автор':
-        arts = db.session.query(Art).filter(Art.author == user.login).order_by(Art.create_on).all()
-        g_arts = db.session.query(Gallery).filter(Gallery.user_id == user.id).order_by(Gallery.author).all()
+        arts = Art.get_arts(login=current_user.login)
+        g_arts = Gallery.get_gallery(user_id=current_user.id)
         return render_template('gallery/author/gallery_a.html', user=user, arts=arts, g_arts=g_arts)
     else:
-        arts = db.session.query(Gallery).filter(Gallery.user_id == user.id).order_by(Gallery.author).all()
+        arts = Gallery.get_gallery(user_id=current_user.id)
         return render_template('gallery/user/gallery_u.html', user=user, arts=arts)
 
 
@@ -241,12 +234,12 @@ def gallery():
 @login_required
 def show_art(hash=None, hash_g=None):
     if hash:
-        art = db.session.query(Art).filter(Art.hash_name == hash).first()
+        art = Art.get_arts(hash_name=hash)
         art_obj = make_response(art.art)
         art_obj.headers['Content-Type'] = 'image'
         return art_obj
     elif hash_g:
-        art_g = db.session.query(Gallery).filter(Gallery.hash_name == hash_g).first()
+        art_g = Gallery.get_gallery(hash_name=hash_g)
         art_obj = make_response(art_g.art)
         art_obj.headers['Content-Type'] = 'image'
         return art_obj
@@ -256,54 +249,51 @@ def show_art(hash=None, hash_g=None):
 @app.route('/delete_art_gallery/<string:hash_g>')
 @login_required
 def delete_art(hash=None, hash_g=None):
-    if hash:
-        art = db.session.query(Art).filter(Art.hash_name == hash).first()
-        os.remove(os.path.join('static/img/shop_art', art.hash_name + '.png'))
-        art_in_basket = db.session.query(Basket).filter(Basket.art_id == art.id).all()
-        for art_fd in art_in_basket:
-            db.session.delete(art_fd)
-        db.session.delete(art)
-        db.session.commit()
-        return redirect(url_for('gallery'))
-    elif hash_g:
-        art_g = db.session.query(Gallery).filter(Gallery.hash_name == hash_g).first()
-        os.remove(os.path.join('static/img/user_art/User' + str(current_user.id) + '_' + current_user.login,
-                               art_g.hash_name + '.png'))
-        db.session.delete(art_g)
-        db.session.commit()
-        return redirect(url_for('gallery'))
+    try:
+        if hash:
+            art = Art.get_arts(hash_name=hash)
+            os.remove(os.path.join('static/img/shop_art', f'{art.hash_name}.png'))
+            art_in_basket = Basket.get_baskets(art.id)
+            for art_fd in art_in_basket:
+                art_fd.delete_basket()
+            art.delete_art()
+            return redirect(url_for('gallery'))
+        elif hash_g:
+            art_g = Gallery.get_gallery(hash_name=hash_g)
+            os.remove(os.path.join(f'static/img/user_art/User{current_user.id}_{current_user.login}',
+                                f'{art_g.hash_name}.png'))
+            art_g.delete_gallery()
+            return redirect(url_for('gallery'))
+    except Exception as e:
+        return f"Delete art action is failed with error: {e}"
 
 
 @app.route('/download/<string:hash>')
 @app.route('/download_gallery/<string:hash_g>')
 @login_required
 def download(hash=None, hash_g=None):
-    if hash:
-        art = db.session.query(Art).filter(Art.hash_name == hash).first()
-        filename = art.hash_name
-        return send_from_directory('static/img/shop_art', filename + '.png', as_attachment=True)
-    elif hash_g:
-        art_g = db.session.query(Gallery).filter(Gallery.hash_name == hash_g).first()
-        filename = art_g.hash_name
-        return send_from_directory('static/img/user_art/User' + str(current_user.id) + '_' + current_user.login,
-                                   filename + '.png', as_attachment=True)
+    try:
+        if hash:
+            art = Art.get_arts(hash_name=hash)
+            return send_from_directory('static/img/shop_art', f'{art.hash_name}.png', as_attachment=True)
+        elif hash_g:
+            art_g = Gallery.get_gallery(hash_name=hash_g)
+            return send_from_directory(f'static/img/user_art/User{current_user.id}_{current_user.login}',
+                                       f'{art_g.hash_name}.png', as_attachment=True)
+    except Exception as e:
+        return f"Download art action is failed with error: {e}"
 
 
 @app.route('/gallery/update/<string:hash>', methods=['POST', 'GET'])
 @login_required
 def art_update(hash):
-    art = db.session.query(Art).filter(Art.hash_name == hash).first()
+    art = Art.get_arts(hash_name=hash)
     form = ArtUpdateForm(new_name=art.name, genre=art.genre, prise=art.prise)
-    genres = db.session.query(Genre).order_by(Genre.name).all()
-    genres_list = [(genre.name, genre.name) for genre in genres]
-    form.genre.choices = genres_list
-
+    form.genre.choices = [(genre.name, genre.name) for genre in Genre.get_genres()]
     if form.is_submitted():
-        db.session.query(Art).filter(Art.hash_name == hash).update({'name': form.new_name.data,
-                                                                    'genre': form.genre.data,
-                                                                    'prise': form.prise.data},
-                                                                   synchronize_session='fetch')
-        db.session.commit()
+        Art.update_art(hash_name=hash, params={'name': form.new_name.data,
+                                               'genre': form.genre.data,
+                                               'prise': form.prise.data})
         return redirect(url_for('gallery'))
     return render_template('author/art_settings.html', form=form, user=current_user)
 
@@ -336,16 +326,14 @@ def shop(page=1, genre=None, author=None):
             page, app.config['POSTS_PER_PAGE'], False)
     else:
         art = db.session.query(Art).order_by(Art.create_on).paginate(page, app.config['POSTS_PER_PAGE'], False)
-    genres = db.session.query(Genre).order_by(Genre.name).all()
-    basket_info = db.session.query(Basket).filter(Basket.user_id == current_user.id).all()
-    arts_in_basket_id = []
-    for art_in_basket in basket_info:
-        arts_in_basket_id.append(art_in_basket.art_id)
-    return render_template('shop/shop.html', user=current_user, art=art, genres=genres,
-                           author_section=author, genre_section=genre,
-                           basket_info=basket_info, basket_arts=arts_in_basket_id)
+    genres = Genre.get_genres()
+    basket_info = Basket.get_baskets(user_id=current_user.id)
+    arts_in_basket_id = [item.art_id for item in basket_info]
+    return render_template('shop/shop.html', user=current_user, art=art, genres=genres, author_section=author,
+                           genre_section=genre, basket_info=basket_info, basket_arts=arts_in_basket_id)
 
 
+@app.route("/shop/search/", methods=['POST', 'GET'])
 @app.route('/shop/search/<string:search_word>', methods=['POST', 'GET'])
 @app.route('/shop/search/<string:search_word>/<int:page>', methods=['POST', 'GET'])
 @app.route('/shop/search/category/<string:genre_name>/<string:search_word>', methods=['POST', 'GET'])
@@ -356,14 +344,17 @@ def shop(page=1, genre=None, author=None):
 @app.route('/shop/search/<string:author_name>/<string:genre_name>/<string:search_word>/<int:page>', methods=['POST',
                                                                                                              'GET'])
 @login_required
-def search(search_word, page=1, genre_name=None, author_name=None, search_active=True):
+def search(search_word=None, page=1, genre_name=None, author_name=None, search_active=True):
     if request.method == 'POST':
         try:
             if request.form['submit_name'] == 'add_in_basket':
                 add_in_basket(request.form['add_in_basket'], request.path)
         except:
             search_word = request.form['search_word']
-    if genre_name and author_name:
+    if not search_word:
+        result_search = db.session.query(Art).order_by(Art.create_on)\
+            .paginate(page, app.config['POSTS_PER_PAGE'], False)
+    elif genre_name and author_name:
         result_search = db.session.query(Art).filter(Art.name == search_word,
                                                      Art.genre == genre_name,
                                                      Art.author == author_name).order_by(Art.create_on)\
@@ -379,11 +370,9 @@ def search(search_word, page=1, genre_name=None, author_name=None, search_active
     else:
         result_search = db.session.query(Art).filter(Art.name == search_word).order_by(Art.create_on)\
             .paginate(page, app.config['POSTS_PER_PAGE'], False)
-    genres = db.session.query(Genre).order_by(Genre.name).all()
-    basket_info = db.session.query(Basket).filter(Basket.user_id == current_user.id).all()
-    arts_in_basket_id = []
-    for art_in_basket in basket_info:
-        arts_in_basket_id.append(art_in_basket.art_id)
+    genres = Genre.get_genres()
+    basket_info = Basket.get_baskets(user_id=current_user.id)
+    arts_in_basket_id = [item.art_id for item in basket_info]
     return render_template('shop/shop.html', user=current_user, art=result_search, genres=genres,
                            genre_section=genre_name, author_section=author_name,
                            search_active=search_active, search_word=search_word,
@@ -394,7 +383,7 @@ def search(search_word, page=1, genre_name=None, author_name=None, search_active
 @app.route('/shop/all_categories/<string:author>')
 @login_required
 def categories(author=None):
-    genres = db.session.query(Genre).order_by(Genre.name).all()
+    genres = Genre.get_genres()
     return render_template('shop/genre_section.html', user=current_user, genres=genres, author_section=author)
 
 
@@ -419,8 +408,7 @@ def basket(art_id=None):
         return redirect('/gallery')
     if art_id:
         item_for_delete = db.session.query(Basket).filter(Basket.art_id == art_id).first()
-        db.session.delete(item_for_delete)
-        db.session.commit()
+        item_for_delete.delete_basket()
         return redirect(url_for('basket'))
     basket_items = db.session.query(Basket).filter(Basket.user_id == current_user.id).order_by(Basket.prise).all()
     arts_in_basket = []

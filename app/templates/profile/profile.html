@@ -29,45 +29,9 @@
     </div>
 
     <div class="bg-white" style="margin-top: 15px">
-        {% if arts|length == 0 %}
         <a type="button" class="btn btn-lg btn-outline-danger border text-start w-100 btn-dark" href="/gallery">
             <h3 class="display-6">Моя галлерея</h3>
         </a>
-        {% else %}
-
-        {% if role == 'Автор' %}
-        <div id="author_arts" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a type="button" class="btn btn-lg btn-outline-danger border text-start d-block w-100 btn-dark" href="/gallery">
-                        <h3 class="display-6">Моя галлерея</h3>
-                    </a>
-                </div>
-                {% for art in arts %}
-                <div class="carousel-item">
-                    <img src="{{ url_for('show_art', hash=art.hash_name) }}" style="width: 20rem;" class="d-block">
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% else %}
-        <div id="user_arts" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a type="button" class="btn btn-lg btn-outline-danger border text-start d-block w-100 btn-dark" href="/gallery">
-                        <h3 class="display-6">Моя галлерея</h3>
-                    </a>
-                </div>
-                {% for art in arts %}
-                <div class="carousel-item">
-                    <img src="{{ url_for('show_art', hash_g=art.hash_name) }}" class="d-block w-50">
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        {% endif %}
     </div>
 
 </div>
