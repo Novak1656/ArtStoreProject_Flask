@@ -12,7 +12,7 @@
         {% for genre in genres %}
         <div class="row text-center mb-3">
             {% if author_section %}
-            <a type="button" class="btn btn-lg btn-info" href="{{ url_for('shop', genre=genre.name, author=author_section) }}">
+            <a type="button" class="btn btn-lg btn-info" href="{{ url_for('main.shop', genre=genre.name, author=author_section) }}">
                 <div class="text-start border-start border-top">
                     <h1 class="display-9 ms-3">{{ genre.name }}</h1>
                 </div>
@@ -24,7 +24,7 @@
                 </div>
             </a>
             {% else %}
-            <a type="button" class="btn btn-lg btn-info" href="{{ url_for('shop', genre=genre.name) }}">
+            <a type="button" class="btn btn-lg btn-info" href="{{ url_for('main.shop', genre=genre.name) }}">
                 <div class="text-start border-start border-top">
                     <h1 class="display-9 ms-3">{{ genre.name }}</h1>
                 </div>

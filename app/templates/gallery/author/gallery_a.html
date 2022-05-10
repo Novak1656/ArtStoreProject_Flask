@@ -16,14 +16,14 @@
                 {% if arts|length == 0 %}
                 <div class="text-center text-white">
                     <h1 class="display-6">У вас не загружено ни одной иллюстрации</h1>
-                    <a type="button" class="btn btn-outline-success rounded" href="{{ url_for('add_art') }}">Загрузить иллюстрацию</a>
+                    <a type="button" class="btn btn-outline-success rounded" href="{{ url_for('arts.add_art') }}">Загрузить иллюстрацию</a>
                 </div>
                 {% else %}
                 {% for art in arts %}
                 <div class="col p-5" align="center">
                     <div class="card bg-dark text-white border border-start-0 border-end-0  h-100" style="width: 20rem;">
                         <button class="btn" data-bs-toggle="modal" data-bs-target="#art{{art.id}}">
-                            <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                            <img src="{{ url_for('arts.show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
                         </button>
                         <div class="card-body text-center">
                             <h2 class="card-title">{{ art.name }}</h2>
@@ -37,11 +37,11 @@
                         <div class="modal-content bg-light bg-opacity-10">
                             <div class="modal-body text-end">
                                 <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
-                                <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img">
+                                <img src="{{ url_for('arts.show_art', hash=art.hash_name) }}" class="rounded card-img">
                             </div>
                             <div class="modal-footer">
                                 <div class="btn-group-horizontal w-100 text-center btn-sm">
-                                    <a  type="button" href="{{ url_for('art_update', hash=art.hash_name) }}" class="btn btn-outline-warning">
+                                    <a  type="button" href="{{ url_for('arts.art_update', hash=art.hash_name) }}" class="btn btn-outline-warning">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                                             <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
                                             <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
@@ -55,7 +55,7 @@
                                         </svg>
                                         Удалить
                                     </button>
-                                    <a class="btn btn-outline-success" type="button" href="{{ url_for('download', hash=art.hash_name) }}">
+                                    <a class="btn btn-outline-success" type="button" href="{{ url_for('arts.download', hash=art.hash_name) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
                                             <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -82,7 +82,7 @@
                                 <p>После удаления данная иллюстрация больше не будет отображаться в магазине.</p>
                             </div>
                             <div class="modal-footer">
-                                <a type="button" class="btn btn-success" href="{{ url_for('delete_art', hash=art.hash_name) }}">Да</a>
+                                <a type="button" class="btn btn-success" href="{{ url_for('arts.delete_art', hash=art.hash_name) }}">Да</a>
                                 <button class="btn btn-danger" data-bs-dismiss="modal">Нет</button>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                 <div class="col p-5" align="center">
                     <div class="card bg-success bg-opacity-10 text-white border border-start-0 border-end-0 h-100" style="width: 20rem;">
                         <button class="btn" data-bs-toggle="modal" data-bs-target="#g_art{{g_art.art_id}}">
-                            <img src="{{ url_for('show_art', hash_g=g_art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                            <img src="{{ url_for('arts.show_art', hash_g=g_art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
                         </button>
                         <div class="card-body text-center">
                             <p class="card-text">Автор: {{ g_art.author }}</p>
@@ -125,7 +125,7 @@
                         <div class="modal-content bg-light bg-opacity-10">
                             <div class="modal-body text-end">
                                 <button type="button" class="btn-close mb-3" data-bs-dismiss="modal" aria-label="Close"></button>
-                                <img src="{{ url_for('show_art', hash_g=g_art.hash_name) }}" class="rounded card-img">
+                                <img src="{{ url_for('arts.show_art', hash_g=g_art.hash_name) }}" class="rounded card-img">
                             </div>
 
                             <div class="modal-footer">
@@ -138,7 +138,7 @@
                                         Удалить
                                     </button>
 
-                                    <a class="btn btn-outline-success" type="button" href="{{ url_for('download', hash_g=g_art.hash_name) }}">
+                                    <a class="btn btn-outline-success" type="button" href="{{ url_for('arts.download', hash_g=g_art.hash_name) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
                                             <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -164,7 +164,7 @@
                                 <p class="display-9">Вы действительно хотите удалить иллюстрацию из своей галлереи?</p>
                             </div>
                             <div class="modal-footer">
-                                <a type="button" class="btn btn-success" href="{{ url_for('delete_art', hash_g=g_art.hash_name) }}">Да</a>
+                                <a type="button" class="btn btn-success" href="{{ url_for('arts.delete_art', hash_g=g_art.hash_name) }}">Да</a>
                                 <button class="btn btn-danger" data-bs-dismiss="modal">Нет</button>
                             </div>
                         </div>

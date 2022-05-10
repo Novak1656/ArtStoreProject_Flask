@@ -22,7 +22,7 @@
                         <li class="nav-item p-1">
                             <div class="btn-group">
                                 {% if author_section %}
-                                <a type="button" class="btn btn-outline-info" href="{{ url_for('categories', author=author_section) }}">Категории артов</a>
+                                <a type="button" class="btn btn-outline-info" href="{{ url_for('main.categories', author=author_section) }}">Категории артов</a>
                                 {% else %}
                                 <a type="button" class="btn btn-outline-info" href="/shop/all_categories">Категории артов</a>
                                 {% endif %}
@@ -30,9 +30,9 @@
                                 <ul class="dropdown-menu">
                                     {% for genre in genres %}
                                     {% if author_section %}
-                                    <li><a class="dropdown-item" href="{{ url_for('shop', genre=genre.name, author=author_section) }}">{{ genre.name }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('main.shop', genre=genre.name, author=author_section) }}">{{ genre.name }}</a></li>
                                     {% else %}
-                                    <li><a class="dropdown-item" href="{{ url_for('shop', genre=genre.name) }}">{{ genre.name }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('main.shop', genre=genre.name) }}">{{ genre.name }}</a></li>
                                     {% endif %}
                                     {% endfor %}
                                 </ul>
@@ -66,11 +66,14 @@
 
     <div class="album py-5 bg-light rounded">
         <div class="container">
+            {% for msg in get_flashed_messages() %}
+                <div class="flash text-success text-center">{{ msg }}</div>
+            {% endfor %}
             <div class="row gy-5">
                 {% for art in art.items %}
                 <div class="col" align="center">
                     <div class="card shadow-sm mb-4 h-100" style="width: 20rem;">
-                        <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                        <img src="{{ url_for('arts.show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
                         <div class="card-body">
                             <h1 class="card-text display-6">{{ art.name }}</h1>
                             <p class="card-text">Автор: {{ art.author }}</p>
@@ -104,73 +107,73 @@
                     <div class="btn-group">
                         {% if search_active %}
                         {% if art.has_prev and author_section and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.prev_num, author_name = author_section, genre_name = genre_section, search_word = search_word) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.prev_num, author_name = author_section, genre_name = genre_section, search_word = search_word) }}">Previous</a></li>
                         {% elif art.has_prev and author_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.prev_num, author_name = author_section, search_word = search_word) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.prev_num, author_name = author_section, search_word = search_word) }}">Previous</a></li>
                         {% elif art.has_prev and genre_section%}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.prev_num, genre_name = genre_section, search_word = search_word) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.prev_num, genre_name = genre_section, search_word = search_word) }}">Previous</a></li>
                         {% elif art.has_prev %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.prev_num, search_word = search_word) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.prev_num, search_word = search_word) }}">Previous</a></li>
                         {% endif %}
 
                         {% for page in art.iter_pages(left_edge=3, right_edge=3) %}
                         {% if page and author_section and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = page, author_name = author_section, genre_name = genre_section, search_word = search_word) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = page, author_name = author_section, genre_name = genre_section, search_word = search_word) }}">{{ page }}</a></li>
                         {% elif page and author_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = page, author_name = author_section, search_word = search_word) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = page, author_name = author_section, search_word = search_word) }}">{{ page }}</a></li>
                         {% elif page and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = page, genre_name = genre_section, search_word = search_word) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = page, genre_name = genre_section, search_word = search_word) }}">{{ page }}</a></li>
                         {% elif page %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = page, search_word = search_word) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = page, search_word = search_word) }}">{{ page }}</a></li>
                         {% else %}
                         <li class="page-item disabled" id="example_ellipsis_search"><a type="button" class="btn btn-outline-dark" href="#">…</a></li>
                         {% endif %}
                         {% endfor %}
 
                         {% if art.has_next and author_section and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.next_num, author_name = author_section, genre_name = genre_section, search_word = search_word) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.next_num, author_name = author_section, genre_name = genre_section, search_word = search_word) }}">Next</a></li>
                         {% elif art.has_next and author_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.next_num, author_name = author_section, search_word = search_word) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.next_num, author_name = author_section, search_word = search_word) }}">Next</a></li>
                         {% elif art.has_next and genre_section%}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.next_num, genre_name = genre_section, search_word = search_word) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.next_num, genre_name = genre_section, search_word = search_word) }}">Next</a></li>
                         {% elif art.has_next %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('search', page = art.next_num, search_word = search_word) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.search', page = art.next_num, search_word = search_word) }}">Next</a></li>
                         {% endif %}
 
 
                         {% else %}
                         {% if art.has_prev and author_section and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.prev_num, author = author_section, genre = genre_section) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.prev_num, author = author_section, genre = genre_section) }}">Previous</a></li>
                         {% elif art.has_prev and author_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.prev_num, author = author_section) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.prev_num, author = author_section) }}">Previous</a></li>
                         {% elif art.has_prev and genre_section%}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.prev_num, genre = genre_section) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.prev_num, genre = genre_section) }}">Previous</a></li>
                         {% elif art.has_prev %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.prev_num) }}">Previous</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.prev_num) }}">Previous</a></li>
                         {% endif %}
 
                         {% for page in art.iter_pages(left_edge=3, right_edge=3) %}
                         {% if page and author_section and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = page, author = author_section, genre = genre_section) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = page, author = author_section, genre = genre_section) }}">{{ page }}</a></li>
                         {% elif page and author_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = page, author = author_section) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = page, author = author_section) }}">{{ page }}</a></li>
                         {% elif page and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = page, genre = genre_section) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = page, genre = genre_section) }}">{{ page }}</a></li>
                         {% elif page %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = page) }}">{{ page }}</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = page) }}">{{ page }}</a></li>
                         {% else %}
                         <li class="page-item disabled" id="example_ellipsis"><a type="button" class="btn btn-outline-dark" href="#">…</a></li>
                         {% endif %}
                         {% endfor %}
 
                         {% if art.has_next and author_section and genre_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.next_num, author = author_section, genre = genre_section) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.next_num, author = author_section, genre = genre_section) }}">Next</a></li>
                         {% elif art.has_next and author_section %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.next_num, author = author_section) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.next_num, author = author_section) }}">Next</a></li>
                         {% elif art.has_next and genre_section%}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.next_num, genre = genre_section) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.next_num, genre = genre_section) }}">Next</a></li>
                         {% elif art.has_next %}
-                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('shop', page = art.next_num) }}">Next</a></li>
+                        <li class="page-item"><a type="button" class="btn btn-outline-light" href="{{ url_for('main.shop', page = art.next_num) }}">Next</a></li>
                         {% endif %}
                         {% endif %}
                     </div>

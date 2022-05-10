@@ -7,9 +7,3 @@ class Config(object):
     # HOST = '192.168.0.17'
     # PORT = 5000
     POSTS_PER_PAGE = 9
-
-
-
-
-
-

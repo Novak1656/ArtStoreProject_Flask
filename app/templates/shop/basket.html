@@ -19,7 +19,7 @@
             {% for art in arts %}
             <div class="col mb-3" align="center">
                 <div class="card shadow-sm mb-4 h-100" style="width: 20rem;">
-                    <img src="{{ url_for('show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
+                    <img src="{{ url_for('arts.show_art', hash=art.hash_name) }}" class="rounded card-img" oncontextmenu="return false">
                     <div class="card-body">
                         <h1 class="card-text display-6">{{ art.name }}</h1>
                         <p class="card-text">Автор: {{ art.author }}</p>
@@ -28,7 +28,7 @@
                         <p class="card-text">Цена: {{ art.prise }} rub.</p>
                     </div>
                     <div class="card-img-overlay text-start shadow-sm">
-                        <a href="{{ url_for('basket', art_id=art.id) }}" type="button" class="btn bg-danger btn-close"></a>
+                        <a href="{{ url_for('main.basket', art_id=art.id) }}" type="button" class="btn bg-danger btn-close"></a>
                     </div>
                 </div>
             </div>

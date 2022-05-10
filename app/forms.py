@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, SelectField, DateField, IntegerField
+from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, SelectField, DateField,\
+    IntegerField
 from wtforms.validators import InputRequired, DataRequired, Length, Email, EqualTo
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
@@ -14,15 +15,24 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
-    login = StringField('Логин: ', validators=[InputRequired(), Length(min=3, max=25, message="Логин должен быть от 3 до 25 символов")],
+    login = StringField('Логин: ',
+                        validators=[InputRequired(),
+                                    Length(min=3, max=25, message="Логин должен быть от 3 до 25 символов")],
                         render_kw={"placeholder": "Придумайте логин...", "class": "form-control"})
-    email = EmailField('Электронная почта: ', validators=[InputRequired(), Email("Некорректный адрес электронной почты")],
+    email = EmailField('Электронная почта: ',
+                       validators=[InputRequired(), Email("Некорректный адрес электронной почты")],
                        render_kw={"placeholder": "Введите адрес электронной почты...", "class": "form-control"})
-    password = PasswordField('Пароль: ', validators=[InputRequired(), Length(min=8, max=16, message="Пароль должен быть от 8 до 16 символов")],
+    password = PasswordField('Пароль: ',
+                             validators=[InputRequired(),
+                                         Length(min=8, max=16, message="Пароль должен быть от 8 до 16 символов")],
                              render_kw={"placeholder": "Придумайте пароль...", "class": "form-control"})
-    chek_password = PasswordField('Подтвердите пароль: ', validators=[InputRequired(), EqualTo('password', message="Пароли не совпадают")],
+    chek_password = PasswordField('Подтвердите пароль: ',
+                                  validators=[InputRequired(), EqualTo('password', message="Пароли не совпадают")],
                                   render_kw={"placeholder": "Введите пароль ещё раз...", "class": "form-control"})
-    role = SelectField('Я: ', choices=[('Пользователь', 'Пользователь (может покупать иллюстрации)'), ('Автор', 'Автор (может покупать иллюстрации, а также продавать свои)')], validators=[InputRequired()],
+    role = SelectField('Я: ',
+                       choices=[('Пользователь', 'Пользователь (может покупать иллюстрации)'),
+                                ('Автор', 'Автор (может покупать иллюстрации, а также продавать свои)')],
+                       validators=[InputRequired()],
                        render_kw={"placeholder": "Автор/Пользователь", "class": "form-control"})
     submit = SubmitField('Зарегестрироваться', render_kw={"class": "btn btn-success"})
 
@@ -38,7 +48,8 @@ class NewNamesForm(FlaskForm):
 
 
 class NewAvatarForm(FlaskForm):
-    avatar = FileField('Загрузить изображение:', validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')],
+    avatar = FileField('Загрузить изображение:',
+                       validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')],
                        render_kw={"class": "form-control"})
     submit = SubmitField('Сохранить изменения', render_kw={"class": "btn btn-success"})
 
@@ -60,7 +71,9 @@ class NewPasswordForm(FlaskForm):
                              render_kw={"placeholder": "Введите пароль...", "class": "form-control"})
     new_password = PasswordField('Новый пароль:', validators=[InputRequired(), Length(min=8, max=16)],
                                  render_kw={"placeholder": "Введите новый пароль...", "class": "form-control"})
-    chek_new_password = PasswordField('Подтверждение пароля:', validators=[InputRequired(), EqualTo('new_password', message="Пароли не совпадают")],
+    chek_new_password = PasswordField('Подтверждение пароля:',
+                                      validators=[InputRequired(),
+                                                  EqualTo('new_password', message="Пароли не совпадают")],
                                       render_kw={"placeholder": "Введите новый пароль ещё раз...",
                                                  "class": "form-control"})
     submit = SubmitField('Сохранить изменения', render_kw={"class": "btn btn-success"})
